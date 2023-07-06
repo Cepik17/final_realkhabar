@@ -1,0 +1,112 @@
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div class="row mt-2">
+        <div class="col-4 mx-auto">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                 th:if="${param.errorpwd != null}">
+                <strong>Incorrect password!</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                 th:if="${param.errorpasswords != null}">
+                <strong>Passwords don't match!</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert"
+                 th:if="${param.success != null}">
+                <strong>Password changed successfully!</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <form th:action="@{'/updatepassword'}" method="post">
+                <div class="mb-3">
+                    <h5>Hello <span th:text="${#authentication.principal.fullName}"></span></h5>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="id1">Current Password</label>
+                    <input class="form-control" type="password" id="id1" name="current_password">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="id2">New Password</label>
+                    <input type="password" class="form-control" id="id2" name="new_password">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="id3">Repeat New Password</label>
+                    <input type="password" class="form-control" id="id3" name="re_new_password">
+                </div>
+                <button class="btn btn-secondary">Change Password</button>
+            </form>
+        </div>
+    </div>
+    <div class="row mt-2" sec:authorize="hasAuthority('Admin')">
+        <div class="col-4 mx-auto">
+            <hr class="my-4">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                 th:if="${param.editerror != null}">
+                <strong>User change failed</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert"
+                 th:if="${param.editsuccess != null}">
+                <strong>User changed successfully!</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <form th:action="@{'/editrole'}" method="post">
+                <div class="mb-3">
+                    <h5>Change user role</h5>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="form_email">Email</label>
+                    <input class="form-control" type="email" id="form_email" name="email">
+                </div>
+                <div class="mb-3">
+                    <label class="form-label" for="idrole">Role</label>
+                    <select class="form-select" id="idrole" name="roleId">
+                        <option value="1">Admin</option>
+                        <option value="2">Author</option>
+                        <option value="3">User</option>
+                    </select>
+                </div>
+                <button class="btn btn-warning">Save changes</button>
+            </form>
+            <hr class="my-4">
+            <div class="alert alert-danger alert-dismissible fade show" role="alert"
+                 th:if="${param.errordelete != null}">
+                <strong>User deletion failed</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="alert alert-success alert-dismissible fade show" role="alert"
+                 th:if="${param.successdelete != null}">
+                <strong>User deleted successfully!</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            <div class="mb-3">
+                <h5>Delete user</h5>
+            </div>
+            <form th:action="@{'/deleteuser'}" method="post">
+                <div class="mb-3">
+                    <label class="form-label" for="id4">Email</label>
+                    <input class="form-control" type="email" id="id4" name="email">
+                </div>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete User</button>
+                <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure?</h1>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                <button type="submit" class="btn btn-danger">Yes</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+</html>

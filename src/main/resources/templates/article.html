@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    Hello
+<!--    <input type="hidden" id="userId" th:value="${currentUser.id}">-->
+<!--    <div class="container">-->
+<!--        <a class="btn btn-outline-success mb-3" th:href="@{'/addarticle'}">Add article</a>-->
+<!--    </div>-->
+<!--    <div id="myarticles"></div>-->
+<!--    <script type="text/javascript">-->
+<!--        let userId = document.getElementById("userId").value-->
+<!--        loadArticles(userId)-->
+
+<!--        function loadArticles(userId) {-->
+<!--            let req = new XMLHttpRequest()-->
+<!--            req.open("GET", "http://localhost:8080/api/article/my?userId=" + userId)-->
+<!--            req.onload = function () {-->
+<!--                let html = ""-->
+<!--                let articles = JSON.parse(req.responseText)-->
+<!--                html += "<table class='table'>"-->
+<!--                html += "<thead>"-->
+<!--                html += "<tr>"-->
+<!--                html += "<th>Title</th>"-->
+<!--                html += "<th>Description</th>"-->
+<!--                html += "<th>Details</th>"-->
+<!--                html += "</tr>"-->
+<!--                html += "</thead>"-->
+<!--                html += "<tbody>"-->
+<!--                for(let i=0; i< articles.length; i++){-->
+<!--                    html +="<tr>"-->
+<!--                    html += "<td>"+articles[i].title+"</td>"-->
+<!--                    html += "<td>"+articles[i].description+"</td>"-->
+<!--                    html += "<td><button class='btn btn-secondary'>Edit</button></td>"-->
+<!--                    html +="</tr>"-->
+<!--                }-->
+<!--                html += "</tbody>"-->
+<!--                html += "</table>"-->
+<!--                document.getElementById("myarticles").innerHTML = html-->
+<!--            }-->
+<!--            req.send()-->
+<!--        }-->
+<!--    </script>-->
+</div>
+</html>
