@@ -7,19 +7,19 @@
             <div class="col-4 mx-auto">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert"
                      th:if="${param.error != null}">
-                    <strong>Wrong email or password!</strong>
+                    <strong>Не правильный пароль или email</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <form th:action="@{'/enter'}" method="post">
                     <div class="mb-3">
-                        <label class="form-label" for="form_email">Email</label>
+                        <label class="form-label" for="form_email">Электронная почта</label>
                         <input class="form-control" type="email" id="form_email" name="user_email">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="form_password">Password</label>
+                        <label class="form-label" for="form_password">Пароль</label>
                         <input type="password" class="form-control" id="form_password" name="user_password">
                     </div>
-                    <button class="btn btn-secondary">SIGN IN</button>
+                    <button class="btn btn-secondary">Войти</button>
                 </form>
             </div>
         </div>

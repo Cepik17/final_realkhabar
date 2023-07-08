@@ -7,36 +7,36 @@
         <div class="col-4 mx-auto">
             <div class="alert alert-danger alert-dismissible fade show" role="alert"
                  th:if="${param.errorpwd != null}">
-                <strong>Incorrect password!</strong>
+                <strong>Неверный пароль!</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div class="alert alert-danger alert-dismissible fade show" role="alert"
                  th:if="${param.errorpasswords != null}">
-                <strong>Passwords don't match!</strong>
+                <strong>Пароли не сопадают!</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div class="alert alert-success alert-dismissible fade show" role="alert"
                  th:if="${param.success != null}">
-                <strong>Password changed successfully!</strong>
+                <strong>Пароль успешно изменен!</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <form th:action="@{'/updatepassword'}" method="post">
                 <div class="mb-3">
-                    <h5>Hello <span th:text="${#authentication.principal.fullName}"></span></h5>
+                    <h5>Привет <span th:text="${#authentication.principal.fullName}"></span></h5>
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="id1">Current Password</label>
+                    <label class="form-label" for="id1">Текущий пароль</label>
                     <input class="form-control" type="password" id="id1" name="current_password">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="id2">New Password</label>
+                    <label class="form-label" for="id2">Новый пароль</label>
                     <input type="password" class="form-control" id="id2" name="new_password">
                 </div>
                 <div class="mb-3">
-                    <label class="form-label" for="id3">Repeat New Password</label>
+                    <label class="form-label" for="id3">Повторите новый пароль</label>
                     <input type="password" class="form-control" id="id3" name="re_new_password">
                 </div>
-                <button class="btn btn-secondary">Change Password</button>
+                <button class="btn btn-secondary">Изменить пароль</button>
             </form>
         </div>
     </div>
@@ -45,17 +45,17 @@
             <hr class="my-4">
             <div class="alert alert-danger alert-dismissible fade show" role="alert"
                  th:if="${param.editerror != null}">
-                <strong>User change failed</strong>
+                <strong>Изменение пользователя не успешно!</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div class="alert alert-success alert-dismissible fade show" role="alert"
                  th:if="${param.editsuccess != null}">
-                <strong>User changed successfully!</strong>
+                <strong>Пользователь успешно изменен!</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <form th:action="@{'/editrole'}" method="post">
                 <div class="mb-3">
-                    <h5>Change user role</h5>
+                    <h5>Изменить права пользователя</h5>
                 </div>
                 <div class="mb-3">
                     <label class="form-label" for="form_email">Email</label>
@@ -69,38 +69,38 @@
                         <option value="3">User</option>
                     </select>
                 </div>
-                <button class="btn btn-warning">Save changes</button>
+                <button class="btn btn-warning">Сохранить</button>
             </form>
             <hr class="my-4">
             <div class="alert alert-danger alert-dismissible fade show" role="alert"
                  th:if="${param.errordelete != null}">
-                <strong>User deletion failed</strong>
+                <strong>Не удалось удалить пользователся</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div class="alert alert-success alert-dismissible fade show" role="alert"
                  th:if="${param.successdelete != null}">
-                <strong>User deleted successfully!</strong>
+                <strong>Пользователь успешно удален</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div class="mb-3">
-                <h5>Delete user</h5>
+                <h5>Удалить пользователя</h5>
             </div>
             <form th:action="@{'/deleteuser'}" method="post">
                 <div class="mb-3">
                     <label class="form-label" for="id4">Email</label>
                     <input class="form-control" type="email" id="id4" name="email">
                 </div>
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Delete User</button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Удалить</button>
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure?</h1>
+                                <h1 class="modal-title fs-5" id="exampleModalLabel">Вы уверены?</h1>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                                <button type="submit" class="btn btn-danger">Yes</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                                <button type="submit" class="btn btn-danger">Да</button>
                             </div>
                         </div>
                     </div>

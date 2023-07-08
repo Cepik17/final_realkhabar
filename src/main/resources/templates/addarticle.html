@@ -5,24 +5,24 @@
 
 <div layout:fragment="content">
     <input type="hidden" id="userId" th:value="${currentUser.id}">
-
     <div class="row mt-2">
         <div class="col-6 mx-auto">
             <div class="mb-3">
                 <label class="form-label" for="title">Название</label>
-                <input class="form-control" type="text" id="title" name="title">
+                <input class="form-control" type="text" id="title" name="title" required>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="description">Описание</label>
-                <input type="text" class="form-control" id="description" name="description">
+                <input type="text" class="form-control" id="description" name="description" required>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="text">Текст</label>
-                <textarea type="text" class="form-control" id="text" name="text" rows="20"></textarea>
+                <textarea type="text" class="form-control" id="text" name="text" rows="20" required></textarea>
             </div>
             <div class="mb-3">
                 <label class="form-label" for="imgUrl">Изображение</label>
-                <input type="text" class="form-control" id="imgUrl" name="imgUrl" placeholder="Укажите URL изображения">
+                <input type="text" class="form-control" id="imgUrl" name="imgUrl" placeholder="Укажите URL изображения"
+                       required>
             </div>
             <div class="form-check mb-3">
                 <input class="form-check-input" type="checkbox" name="isNewsOfTheDay" id="isNewsOfTheDay">
@@ -30,7 +30,7 @@
             </div>
             <div class="mb-3">
                 <label class="form-label" for="categoryId">Категории</label>
-                <select multiple class="form-select" id="categoryId" name="categoryId">
+                <select multiple class="form-select" id="categoryId" name="categoryId" required>
                     <option value="1">Мир</option>
                     <option value="2">Казахстан</option>
                     <option value="3">Технологии</option>
@@ -44,29 +44,32 @@
                     <option value="11">Путешествие</option>
                 </select>
             </div>
-                <button class="btn btn-secondary" onclick="addArticle()">Save</button>
+            <button class="btn btn-secondary" onclick="addArticle()">Save</button>
         </div>
     </div>
     <script type="text/javascript">
-        function addArticle(){
+        function addArticle() {
             let req = new XMLHttpRequest()
             let select = document.getElementById("categoryId");
             let selectedCategories = Array.from(select.selectedOptions).map(option => parseInt(option.value));
-            alert("isNewsOfTheDay" + document.getElementById("isNewsOfTheDay").checked)
             let articleCreate = {
                 "title": document.getElementById("title").value,
                 "description": document.getElementById("description").value,
                 "text": document.getElementById("text").value,
                 "newsOfTheDay": document.getElementById("isNewsOfTheDay").checked,
                 "imgUrl": document.getElementById("imgUrl").value,
-                "authorId":document.getElementById("userId").value,
+                "authorId": document.getElementById("userId").value,
                 "categoryId": selectedCategories
             }
             req.open("POST", "http://localhost:8080/api/article")
             req.setRequestHeader("Content-type", "application/json")
             req.send(JSON.stringify(articleCreate))
             req.onload = function () {
-                window.location.href = "http://localhost:8080/myarticles"
+                if (req.status === 200) {
+                    window.location.href = "http://localhost:8080/myarticles"
+                } else if (req.status === 400) {
+                    alert(req.response)
+                }
             }
         }
     </script>

@@ -3,44 +3,51 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="layout/main.html">
 <div layout:fragment="content">
-    Hello
-<!--    <input type="hidden" id="userId" th:value="${currentUser.id}">-->
-<!--    <div class="container">-->
-<!--        <a class="btn btn-outline-success mb-3" th:href="@{'/addarticle'}">Add article</a>-->
-<!--    </div>-->
-<!--    <div id="myarticles"></div>-->
-<!--    <script type="text/javascript">-->
-<!--        let userId = document.getElementById("userId").value-->
-<!--        loadArticles(userId)-->
+    <input type="hidden" id="articleId" th:value="${articleId}">
+    <div id="article"></div>
+    <script type="text/javascript">
+        let articleId = document.getElementById("articleId").value
+        loadArticle(articleId)
 
-<!--        function loadArticles(userId) {-->
-<!--            let req = new XMLHttpRequest()-->
-<!--            req.open("GET", "http://localhost:8080/api/article/my?userId=" + userId)-->
-<!--            req.onload = function () {-->
-<!--                let html = ""-->
-<!--                let articles = JSON.parse(req.responseText)-->
-<!--                html += "<table class='table'>"-->
-<!--                html += "<thead>"-->
-<!--                html += "<tr>"-->
-<!--                html += "<th>Title</th>"-->
-<!--                html += "<th>Description</th>"-->
-<!--                html += "<th>Details</th>"-->
-<!--                html += "</tr>"-->
-<!--                html += "</thead>"-->
-<!--                html += "<tbody>"-->
-<!--                for(let i=0; i< articles.length; i++){-->
-<!--                    html +="<tr>"-->
-<!--                    html += "<td>"+articles[i].title+"</td>"-->
-<!--                    html += "<td>"+articles[i].description+"</td>"-->
-<!--                    html += "<td><button class='btn btn-secondary'>Edit</button></td>"-->
-<!--                    html +="</tr>"-->
-<!--                }-->
-<!--                html += "</tbody>"-->
-<!--                html += "</table>"-->
-<!--                document.getElementById("myarticles").innerHTML = html-->
-<!--            }-->
-<!--            req.send()-->
-<!--        }-->
-<!--    </script>-->
+        function loadArticle(articleId) {
+            let req = new XMLHttpRequest()
+            req.open("GET", "http://localhost:8080/api/article/" + articleId)
+            req.onload = function () {
+                let article = JSON.parse(req.responseText)
+                let authorReq = new XMLHttpRequest()
+                authorReq.open("GET", "http://localhost:8080/api/user/" + article.authorId);
+                authorReq.onload = function () {
+                    let authorFullName = authorReq.responseText
+                    let categoriesReq = new XMLHttpRequest();
+                    categoriesReq.open("GET", "http://localhost:8080/api/article/" + articleId + "/categories");
+                    categoriesReq.onload = function () {
+                        let categories = JSON.parse(categoriesReq.responseText);
+
+                        let commentsReq = new XMLHttpRequest();
+                        commentsReq.open("GET", "http://localhost:8080/api/article/" + articleId + "/comments");
+                        commentsReq.onload = function () {
+                            let comments = JSON.parse(commentsReq.responseText);
+                            let html = ""
+                            html += "<div class='row g-5'>"
+                            html += "<div class='col-md-8'>"
+                            html += "<article class='blog-post'>"
+                            html += "<h2 class='display-5 link-body-emphasis mb-1'>" + article.title + "</h2>"
+                            html += "<p class='blog-post-meta'>" + article.postTime + " by <a href=\"#\">" + authorFullName + "</a></p>"
+                            html += "<p>" + article.text + "</p>"
+                            html += "<p>" + comments.commentText + "</p>"
+                            html += "<button type='button' class='btn btn-link'>" + categories.name + "</button>"
+                            html += "</div>"
+                            html += "</div>"
+                            document.getElementById("article").innerHTML = html
+                        }
+                        commentsReq.send()
+                    }
+                    categoriesReq.send()
+                }
+                authorReq.send();
+            }
+            req.send()
+        }
+    </script>
 </div>
 </html>

@@ -24,8 +24,10 @@ public class Article {
     @Column(columnDefinition = "TEXT")
     private String imgUrl;
     private boolean isNewsOfTheDay;
+
     @ManyToOne(fetch = FetchType.EAGER)
     private User author;
+
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Category> categories;
 }

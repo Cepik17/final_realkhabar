@@ -7,37 +7,37 @@
             <div class="col-4 mx-auto">
                 <div class="alert alert-danger alert-dismissible fade show" role="alert"
                      th:if="${param.errorEmail != null}">
-                    <strong>Incorrect email!</strong>
+                    <strong>Неправильный email!</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <div class="alert alert-danger alert-dismissible fade show" role="alert"
                      th:if="${param.errorPassword != null}">
-                    <strong>Passwords don't match!</strong>
+                    <strong>Пароли не совпадает</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <div class="alert alert-success alert-dismissible fade show" role="alert"
                      th:if="${param.success != null}">
-                    <strong>User created successfully!</strong>
+                    <strong>Вы успешно создали пользователя!</strong>
                     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                 </div>
                 <form th:action="@{'/signup'}" method="post">
                     <div class="mb-3">
-                        <label class="form-label" for="form_name">Full Name</label>
+                        <label class="form-label" for="form_name">ФИО</label>
                         <input class="form-control" type="text" id="form_name" name="fullName">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="form_email">Email</label>
+                        <label class="form-label" for="form_email">Электронная почта</label>
                         <input class="form-control" type="email" id="form_email" name="email">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="form_password">Password</label>
+                        <label class="form-label" for="form_password">Пароль</label>
                         <input type="password" class="form-control" id="form_password" name="password">
                     </div>
                     <div class="mb-3">
-                        <label class="form-label" for="form_repassword">Repeat Password</label>
+                        <label class="form-label" for="form_repassword">Повторите пароль</label>
                         <input type="password" class="form-control" id="form_repassword" name="rePassword">
                     </div>
-                    <button class="btn btn-outline-secondary">Register</button>
+                    <button class="btn btn-outline-secondary">Зарегистрироваться</button>
                 </form>
             </div>
         </div>

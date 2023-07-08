@@ -115,4 +115,10 @@ public class UserServiceImpl implements UserService {
     public User getUserById(Long userId) {
         return userRepository.findById(userId).orElseThrow();
     }
+
+    @Override
+    public String getFullNameByAuthorId(Long authorId) {
+        User user = userRepository.findById(authorId).orElseThrow();
+        return user.getFullName();
+    }
 }

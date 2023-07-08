@@ -1,6 +1,7 @@
 package kz.bitlab.realKhabar.realKhabar.mappers;
 
 import kz.bitlab.realKhabar.realKhabar.dtos.ArticleCreate;
+import kz.bitlab.realKhabar.realKhabar.dtos.ArticleUpdate;
 import kz.bitlab.realKhabar.realKhabar.dtos.ArticleView;
 import kz.bitlab.realKhabar.realKhabar.models.Article;
 import org.mapstruct.Mapper;
@@ -25,4 +26,7 @@ public interface ArticleMapper {
 
     @Mapping(source = "authorId", target = "author.id")
     Article toEntity(ArticleView articleView);
+
+    @Mapping(source = "authorId", target = "author.id")
+    Article toEntity(ArticleUpdate articleUpdate);
 }

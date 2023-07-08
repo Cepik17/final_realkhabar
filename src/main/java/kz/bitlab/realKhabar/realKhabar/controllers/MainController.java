@@ -42,9 +42,9 @@ public class MainController {
     }
 
     @GetMapping("/article/{id}")
-    public String articlePage(@PathVariable Long id){
+    public String articlePage(@PathVariable Long id, Model model){
 //        ArticleView articleView = articleService.findByNewsOfTheDayIsTrue();
-//        model.addAttribute("articleOfTheDay", articleView);
+        model.addAttribute("articleId", id);
         return "article";
     }
 }

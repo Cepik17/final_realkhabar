@@ -5,9 +5,63 @@
 <div layout:fragment="content">
     <input type="hidden" id="userId" th:value="${currentUser.id}">
     <div class="container">
-        <a class="btn btn-outline-success mb-3" th:href="@{'/addarticle'}">Add article</a>
+        <a class="btn btn-sm btn-outline-success mb-3" th:href="@{'/addarticle'}">Новая статья</a>
     </div>
     <div id="myarticles"></div>
+    <div class="modal fade" id="editArticleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-xl">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="exampleModalLabel">Редактирование статьи</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="id">
+                    <div class="mb-3">
+                        <label class="form-label" for="title">Название</label>
+                        <input class="form-control" type="text" id="title" name="title" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="description">Описание</label>
+                        <input type="text" class="form-control" id="description" name="description" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="text">Текст</label>
+                        <textarea type="text" class="form-control" id="text" name="text" rows="20"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="imgUrl">Изображение</label>
+                        <input type="text" class="form-control" id="imgUrl" name="imgUrl">
+                    </div>
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="isNewsOfTheDay" id="isNewsOfTheDay">
+                        <label class="form-check-label" for="isNewsOfTheDay">Новость дня</label>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="categoryId">Категории</label>
+                        <select multiple class="form-select" id="categoryId" name="categoryId" required>
+                            <option value="1">Мир</option>
+                            <option value="2">Казахстан</option>
+                            <option value="3">Технологии</option>
+                            <option value="4">Культура</option>
+                            <option value="5">Бизнес</option>
+                            <option value="6">Политика</option>
+                            <option value="7">Мнение</option>
+                            <option value="8">Наука</option>
+                            <option value="9">Здоровье</option>
+                            <option value="10">Мода</option>
+                            <option value="11">Путешествие</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+                    <button onclick="updateArticle()" type="button" class="btn btn-primary">Сохранить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script type="text/javascript">
         let userId = document.getElementById("userId").value
         loadArticles(userId)
@@ -31,7 +85,7 @@
                     html +="<tr>"
                     html += "<td>"+articles[i].title+"</td>"
                     html += "<td>"+articles[i].description+"</td>"
-                    html += "<td><button class='btn btn-secondary'>Edit</button></td>"
+                    html += "<td><button onclick='editArticleModal(" + articles[i].id + ")' class='btn btn-secondary'>Edit</button></td>"
                     html +="</tr>"
                 }
                 html += "</tbody>"
@@ -40,6 +94,51 @@
             }
             req.send()
         }
+
+        function editArticleModal(articleId) {
+            let req = new XMLHttpRequest();
+            req.open("GET", "http://localhost:8080/api/article/" + articleId);
+            req.onload = function () {
+                let article = JSON.parse(req.responseText)
+                document.getElementById("id").value = articleId
+                document.getElementById("title").value = article.title
+                document.getElementById("description").value = article.description
+                document.getElementById("text").value = article.text
+                document.getElementById("isNewsOfTheDay").checked = article.isNewsOfTheDay
+                document.getElementById("imgUrl").value = article.imgUrl
+                const myModal = new bootstrap.Modal("#editArticleModal", {backdrop: true, focus: true, keyboard: true})
+                myModal.show();
+            }
+            req.send();
+        }
+
+        function updateArticle(){
+            let req = new XMLHttpRequest()
+            let select = document.getElementById("categoryId");
+            let selectedCategories = Array.from(select.selectedOptions).map(option => parseInt(option.value));
+            let articleCreate = {
+                "id" : document.getElementById("id").value,
+                "title": document.getElementById("title").value,
+                "description": document.getElementById("description").value,
+                "text": document.getElementById("text").value,
+                "newsOfTheDay": document.getElementById("isNewsOfTheDay").checked,
+                "imgUrl": document.getElementById("imgUrl").value,
+                "authorId": document.getElementById("userId").value,
+                "categoryId": selectedCategories
+            }
+            req.open("PUT", "http://localhost:8080/api/article")
+            req.setRequestHeader("Content-type", "application/json")
+            req.send(JSON.stringify(articleCreate))
+            req.onload = function () {
+                if (req.status === 200) {
+                    window.location.href = "http://localhost:8080/myarticles"
+                } else if (req.status === 400) {
+                    alert(req.response)
+                }
+            }
+        }
     </script>
+
+
 </div>
 </html>
