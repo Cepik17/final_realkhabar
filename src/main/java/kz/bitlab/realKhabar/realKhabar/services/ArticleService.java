@@ -10,7 +10,7 @@ public interface ArticleService {
 
     ArticleView addNewArticle(ArticleCreate articleCreate);
 
-    List<ArticleView> getAllUserArticles(UserView userView);
+    List<ArticleView> getAllArticles();
 
     List<ArticleView> findArticlesByUserId(Long userId);
 

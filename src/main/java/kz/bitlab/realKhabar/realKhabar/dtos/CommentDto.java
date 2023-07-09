@@ -17,6 +17,6 @@ public class CommentDto {
     private Long id;
     private String commentText;
     private LocalDateTime commentTime;
-    private Long authorId;
+    private UserView author;
     private Long articleId;
 }

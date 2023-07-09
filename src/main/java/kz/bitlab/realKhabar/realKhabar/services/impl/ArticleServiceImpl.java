@@ -80,9 +80,8 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleView> getAllUserArticles(UserView userView) {
-        User user = userMapper.toEntity(userView);
-        List<Article> articles = articleRepository.findArticlesByAuthor(user);
+    public List<ArticleView> getAllArticles() {
+        List<Article> articles = articleRepository.findAll();
         return articleMapper.toViewList(articles);
     }
 
@@ -147,4 +146,7 @@ public class ArticleServiceImpl implements ArticleService {
 }
 //        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
 //        String formattedDateTime = LocalDateTime.now().format(formatter);
+//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
+//    LocalDateTime now = LocalDateTime.now();
+//    String formattedDateTime = now.format(formatter);
 

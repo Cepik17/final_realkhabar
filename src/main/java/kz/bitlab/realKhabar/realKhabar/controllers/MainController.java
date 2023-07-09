@@ -11,6 +11,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import java.util.List;
+
 @Controller
 @RequiredArgsConstructor
 public class MainController {
@@ -20,8 +22,10 @@ public class MainController {
 
     @GetMapping("/")
     public String homePage(Model model){
+        List<ArticleView> allArticles = articleService.getAllArticles();
         ArticleView articleView = articleService.findByNewsOfTheDayIsTrue();
         model.addAttribute("articleOfTheDay", articleView);
+        model.addAttribute("articles", allArticles);
         return "home";
     }
 
@@ -41,10 +45,13 @@ public class MainController {
         return "addarticle";
     }
 
+    @PreAuthorize("isAuthenticated()")
     @GetMapping("/article/{id}")
     public String articlePage(@PathVariable Long id, Model model){
 //        ArticleView articleView = articleService.findByNewsOfTheDayIsTrue();
         model.addAttribute("articleId", id);
+        User user =userService.getCurrentUser();
+        model.addAttribute("currentUser", user);
         return "article";
     }
 }
