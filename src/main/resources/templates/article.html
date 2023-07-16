@@ -1,16 +1,22 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       layout:decorate="layout/main.html">
 <div layout:fragment="content">
     <input type="hidden" id="articleId" th:value="${articleId}">
     <input type="hidden" id="authorId" th:value="${currentUser.id}">
+<!--    <div id="userRole" th:attr="data-userRole=${#authentication.principal.authorities[0].authority}"></div>-->
+<!--    <input type="hidden" id="role" th:value="${currentUser.getRoles().getId()}">-->
+    <input type="hidden" th:each="role : ${currentUser.getRoles()}" th:value="${role.getName()}" th:id="${role.getName()}">
+
     <main class="container">
         <div class="row g-5">
             <div id="article" class="col-md-8"></div>
             <div th:insert="~{layout/sidebar}" class="col-md-4"></div>
         </div>
     </main>
+<!--    <button onclick="deletecommentModal(commentId)" type="button" class="btn btn-primary" sec:authorize="hasAuthority('ROLE_Admin')">Deletee</button>-->
 
     <div class="modal fade" id="addNewCommentModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -27,6 +33,26 @@
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="modal fade" id="deleteCommentModal" tabindex="-1" aria-labelledby="deleteArticleModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteCommentModal">Удалить комментарий?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="commentId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+                    <button type="button" onclick="deleteComment()" class="btn btn-danger">Да</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <script type="text/javascript">
         let articleId = document.getElementById("articleId").value
         loadArticle(articleId)
@@ -36,10 +62,7 @@
             req.open("GET", "http://localhost:8080/api/article/" + articleId)
             req.onload = function () {
                 let article = JSON.parse(req.responseText)
-                let authorReq = new XMLHttpRequest()
-                authorReq.open("GET", "http://localhost:8080/api/user/" + article.authorId);
-                authorReq.onload = function () {
-                    let authorFullName = authorReq.responseText
+                let authorFullName = article.author.fullName
                     let categoriesReq = new XMLHttpRequest();
                     categoriesReq.open("GET", "http://localhost:8080/api/article/" + articleId + "/categories");
                     categoriesReq.onload = function () {
@@ -48,33 +71,43 @@
                         commentsReq.open("GET", "http://localhost:8080/api/article/" + articleId + "/comments");
                         commentsReq.onload = function () {
                             let comments = JSON.parse(commentsReq.responseText);
+                            let optionsDate = { year: 'numeric', month: 'long', day: 'numeric' }
+                            let optionsTime = { hour: 'numeric', minute: 'numeric'}
+                            let formattedDate = new Date(article.postTime).toLocaleDateString("ru-RU", optionsDate)
+                            let formattedTime = new Date(article.postTime).toLocaleTimeString("ru-RU", optionsTime)
+                            formattedDate = formattedDate.replaceAll(" г.", " ")
                             let html = ""
-                            // html += "<div class='row g-5'>"
-                            // html += "<div class='col-md-8'>"
                             html += "<article class='blog-post'>"
                             html += "<h2 class='display-5 link-body-emphasis mb-1'>" + article.title + "</h2>"
-                            html += "<p class='blog-post-meta'>" + article.postTime + " автор <a href=\"#\">" + authorFullName + "</a></p>"
+                            html += "<p class='blog-post-meta'>" + formattedDate + formattedTime +" автор " +
+                                "<a href='/author/"+article.author.id+"'>" + authorFullName + "</a></p>"
                             html += "<img class='w-100' src='"+article.imgUrl+"'>"
                             html += "<div class='mt-3'>" + article.text + "</div>"
                             for(let i=0; i< categories.length; i++){
-                                html += "<button type='button' class='btn btn-link'>" + categories[i].name + "</button>"
+                                html += "<a href='/category/"+categories[i].id +"' type='button' class='btn btn-link'>" + categories[i].name + "</a>"
                             }
                             html += "<hr>"
                             html += "<p><b>Комментарии:</b></p>"
                             for(let i=0; i< comments.length; i++) {
-                                html += "<p class='fw-medium'>" + comments[i].author.fullName + " <span>"+comments[i].commentTime+"</span></p>"
+                                let optionsDate = { year: 'numeric', month: 'long', day: 'numeric' }
+                                let optionsTime = { hour: 'numeric', minute: 'numeric'}
+                                let formattedDate = new Date(comments[i].commentTime).toLocaleDateString("ru-RU", optionsDate)
+                                let formattedTime = new Date(comments[i].commentTime).toLocaleTimeString("ru-RU", optionsTime)
+                                formattedDate = formattedDate.replaceAll(" г.", " ")
+                                html += "<p class='fw-medium'>" + comments[i].author.fullName + " <span>"+formattedDate+formattedTime+"</span></p>"
                                 html += "<p>" + comments[i].commentText + "</p>"
+                                let isAdmin = document.getElementById('ROLE_Admin') !== null;
+                                if (isAdmin) {
+                                    html += "<button onclick='deleteCommentModal("+comments[i].id+")' class='btn btn-danger btn-sm'>Удалить комментарий</button>"
+                                }
+                                html +="<br>"
                             }
-                            html += "<button onclick='addNewCommentModal()' class='btn btn-sm btn-secondary'>Новый комментарий</button>"
-                            // html += "</div>"
-                            // html += "</div>"
+                            html += "<button onclick='addNewCommentModal()' class='btn btn-sm btn-secondary mt-3'>Новый комментарий</button>"
                             document.getElementById("article").innerHTML = html
                         }
                         commentsReq.send()
                     }
                     categoriesReq.send()
-                }
-                authorReq.send();
             }
             req.send()
         }
@@ -101,7 +134,26 @@
                     alert(req.response)
                 }
             }
+        }
 
+        function deleteCommentModal(commentId) {
+            document.getElementById('commentId').value = commentId
+            const myModal = new bootstrap.Modal("#deleteCommentModal", {backdrop: true, focus: true, keyboard: true})
+            myModal.show();
+        }
+
+        function deleteComment() {
+            let req = new XMLHttpRequest()
+            let id = document.getElementById('commentId').value
+            req.open("DELETE", "http://localhost:8080/api/comments/delete/" + id)
+            req.send()
+            req.onload = function () {
+                if (req.status === 200) {
+                    window.location.href = "http://localhost:8080/article/" + articleId
+                } else if (req.status === 400) {
+                    alert(req.response)
+                }
+            }
         }
     </script>
 </div>

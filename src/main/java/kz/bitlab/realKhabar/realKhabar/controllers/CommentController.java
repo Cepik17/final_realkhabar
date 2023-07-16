@@ -8,10 +8,7 @@ import kz.bitlab.realKhabar.realKhabar.repositories.CommentRepository;
 import kz.bitlab.realKhabar.realKhabar.services.CommentService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
@@ -27,5 +24,10 @@ public class CommentController {
     @PostMapping
     public void addNewComment(@RequestBody CommentCreate commentCreate) {
         commentService.addNewComment(commentCreate);
+    }
+    @PreAuthorize("hasAnyRole('ROLE_Admin')")
+    @DeleteMapping("/delete/{commentId}")
+    public void deleteComment(@PathVariable Long commentId){
+        commentService.deleteComment(commentId);
     }
 }

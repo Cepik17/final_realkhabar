@@ -1,6 +1,7 @@
 package kz.bitlab.realKhabar.realKhabar.repositories;
 
 import kz.bitlab.realKhabar.realKhabar.models.Article;
+import kz.bitlab.realKhabar.realKhabar.models.Category;
 import kz.bitlab.realKhabar.realKhabar.models.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
@@ -17,10 +18,19 @@ public interface ArticleRepository extends JpaRepository<Article, Long> {
 
     @Query("select a from Article a where a.isNewsOfTheDay=true")
     Article findArticleByNewsOfTheDayIsTrue();
+
     @Modifying
     @Transactional
     @Query("update Article a set a.isNewsOfTheDay = false where a.isNewsOfTheDay = true")
     void resetNewsOfTheDay();
 
     Article getArticleById(Long articleId);
+
+    List<Article> getAllByOrderByPostTimeDesc();
+
+    @Query("select a from Article a join a.categories c where c.name = :categoryName")
+    List<Article> getAllArticlesByCategoryId(String categoryName);
+
+    List<Article> getAllByAuthorId(Long authorId);
+
 }

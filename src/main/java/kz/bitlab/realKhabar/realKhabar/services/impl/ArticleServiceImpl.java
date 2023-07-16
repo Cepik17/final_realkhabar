@@ -11,16 +11,13 @@ import kz.bitlab.realKhabar.realKhabar.models.Comment;
 import kz.bitlab.realKhabar.realKhabar.models.User;
 import kz.bitlab.realKhabar.realKhabar.repositories.ArticleRepository;
 import kz.bitlab.realKhabar.realKhabar.repositories.CategoryRepository;
-import kz.bitlab.realKhabar.realKhabar.repositories.CommentRepository;
 import kz.bitlab.realKhabar.realKhabar.services.ArticleService;
 import kz.bitlab.realKhabar.realKhabar.services.CommentService;
 import kz.bitlab.realKhabar.realKhabar.services.UserService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
 
@@ -35,9 +32,6 @@ public class ArticleServiceImpl implements ArticleService {
     private ArticleMapper articleMapper;
 
     @Autowired
-    private UserMapper userMapper;
-
-    @Autowired
     private ArticleRepository articleRepository;
 
     @Autowired
@@ -48,6 +42,9 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private CategoryMapper categoryMapper;
 
     @Override
     public ArticleView addNewArticle(ArticleCreate articleCreate) {
@@ -81,7 +78,7 @@ public class ArticleServiceImpl implements ArticleService {
 
     @Override
     public List<ArticleView> getAllArticles() {
-        List<Article> articles = articleRepository.findAll();
+        List <Article> articles =   articleRepository.getAllByOrderByPostTimeDesc();
         return articleMapper.toViewList(articles);
     }
 
@@ -143,10 +140,30 @@ public class ArticleServiceImpl implements ArticleService {
         List<Comment> comments = commentService.findAllByArticle(article);
         return commentMapper.toDtoList(comments);
     }
+
+    @Override
+    public List<ArticleView> getArticlesByCategory(Long id) {
+        Category category = categoryRepository.findById(id).orElseThrow();
+        CategoryDto categoryDto = categoryMapper.toDto(category);
+        List<Article> articles = articleRepository.getAllArticlesByCategoryId(category.getName());
+        return articleMapper.toViewList(articles);
+    }
+
+    @Override
+    public List<ArticleView> getAllByAuthorId(Long authorId) {
+        List<Article> articles = articleRepository.getAllByAuthorId(authorId);
+        return articleMapper.toViewList(articles);
+    }
+
+    @Override
+    public List<ArticleView> getLastArticles() {
+        List<ArticleView> articles = getAllArticles();
+        return articles.subList(0, Math.min(articles.size(), 3));
+    }
+
+    @Override
+    public void deleteArticle(Long articleId) {
+        articleRepository.deleteById(articleId);
+    }
 }
-//        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-//        String formattedDateTime = LocalDateTime.now().format(formatter);
-//DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd-MM-yyyy HH:mm");
-//    LocalDateTime now = LocalDateTime.now();
-//    String formattedDateTime = now.format(formatter);
 

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <input type="hidden" id="authorId" th:value="${authorId}">
+    <main class="container">
+        <div class="row g-5">
+            <div class="col-md-8" id="categories">
+<!--                <nav class="blog-pagination" aria-label="Pagination">-->
+<!--                    <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>-->
+<!--                    <a class="btn btn-outline-secondary rounded-pill disabled">Newer</a>-->
+<!--                </nav>-->
+            </div>
+            <div class="col-md-4" th:insert="~{layout/sidebar}"></div>
+        </div>
+
+    </main>
+    <footer class="py-5 text-center text-body-secondary bg-body-tertiary">
+        <p>Blog built with <a href="https://getbootstrap.com/">Bootstrap</a>.</p>
+        <p class="mb-0">
+            <a href="#">Back to top</a>
+        </p>
+    </footer>
+
+    <script type="text/javascript">
+        let authorId = document.getElementById("authorId").value
+        articlesByAuthor(authorId)
+        function articlesByAuthor(authorId) {
+            let req = new XMLHttpRequest()
+            req.open("GET", "http://localhost:8080/api/article/author/" + authorId)
+            req.onload = function () {
+
+                let html = ""
+                let articles = JSON.parse(req.responseText)
+                for(let i=0; i< articles.length; i++){
+                    let optionsDate = { year: 'numeric', month: 'long', day: 'numeric' }
+                    let optionsTime = { hour: 'numeric', minute: 'numeric'}
+                    let formattedDate = new Date(articles[i].postTime).toLocaleDateString("ru-RU", optionsDate)
+                    let formattedTime = new Date(articles[i].postTime).toLocaleTimeString("ru-RU", optionsTime)
+                    formattedDate = formattedDate.replaceAll(" г.", " ")
+                    html += "<article class='blog-post'>"
+                    html +="<h4 class='display-5 link-body-emphasis mb-1'>"+articles[i].title+"</h4>"
+                    html += "<p class='blog-post-meta'>"
+                    html += "<span>" + formattedDate + formattedTime + "</span>"
+                    html += "<span> автор </span>"
+                    html += "<a href='/author/"+articles[i].author.id+"'>"+articles[i].author.fullName+"</a>"
+                    html += "</p>"
+                    html += "<p>"+articles[i].description+"</p>"
+                    html += "<p><a href='/article/"+articles[i].id+"'>Подробнее...</a></p>"
+                    html += "<hr>"
+                    html += "</article>"
+                }
+                document.getElementById("categories").innerHTML = html
+            }
+            req.send()
+        }
+    </script>
+</div>
+</html>

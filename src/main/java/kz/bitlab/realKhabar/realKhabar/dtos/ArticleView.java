@@ -16,6 +16,6 @@ public class ArticleView {
     private LocalDateTime postTime;
     private String imgUrl;
     private boolean isNewsOfTheDay;
-    private Long authorId;
+    private UserView author;
     private List<CategoryDto> categories;
 }

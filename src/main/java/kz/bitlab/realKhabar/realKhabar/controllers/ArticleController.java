@@ -1,6 +1,7 @@
 package kz.bitlab.realKhabar.realKhabar.controllers;
 
 import kz.bitlab.realKhabar.realKhabar.dtos.*;
+import kz.bitlab.realKhabar.realKhabar.models.Article;
 import kz.bitlab.realKhabar.realKhabar.services.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -15,10 +16,6 @@ public class ArticleController {
 
     private final ArticleService articleService;
 
-//    @PostMapping
-//    private ArticleView addNewArticle(@RequestBody ArticleCreate articleCreate){
-//        return articleService.addNewArticle(articleCreate);
-//    }
     @PostMapping
     public ResponseEntity<?> addNewArticle(@RequestBody ArticleCreate articleCreate){
         try {
@@ -39,11 +36,6 @@ public class ArticleController {
         return articleService.getArticleById(articleId);
     }
 
-//    @PutMapping
-//    public ArticleView updateArticle(@RequestBody ArticleUpdate articleUpdate){
-//        return articleService.updateArticle(articleUpdate);
-//    }
-
     @PutMapping
     public ResponseEntity<?> updateArticle(@RequestBody ArticleUpdate articleUpdate) {
         try {
@@ -63,5 +55,25 @@ public class ArticleController {
     public List<CommentDto> getCommentsByArticleId(@PathVariable Long articleId){
         return articleService.getCommentsByArticleId(articleId);
     }
+
+    @GetMapping("/category/{categoryId}")
+    public List<ArticleView> getAllArticleByCategory(@PathVariable Long categoryId){
+        return articleService.getArticlesByCategory(categoryId);
+    }
+
+    @GetMapping("/author/{authorId}")
+    public List<ArticleView> getAllArticleByAuthor(@PathVariable Long authorId){
+        return articleService.getAllByAuthorId(authorId);
+    }
+    @GetMapping("/all")
+    public List<ArticleView> getAllArticles(){
+        return  articleService.getAllArticles();
+    }
+
+    @DeleteMapping("/delete/{articleId}")
+    public void deleteArticle(@PathVariable Long articleId){
+        articleService.deleteArticle(articleId);
+    }
+
 
 }

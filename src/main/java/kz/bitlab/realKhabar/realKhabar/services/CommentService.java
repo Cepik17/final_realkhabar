@@ -12,4 +12,6 @@ public interface CommentService {
     List<Comment> findAllByArticle(Article article);
 
     void addNewComment(CommentCreate commentCreate);
+
+    void deleteComment(Long commentId);
 }

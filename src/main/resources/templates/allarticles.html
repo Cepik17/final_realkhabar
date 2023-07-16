@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <div id="allarticles"></div>
+    <div class="modal fade" id="deleteArticleModal" tabindex="-1" aria-labelledby="deleteArticleModal"
+         aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="deleteArticleModal">Удалить статью?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" id="articleId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+                    <button type="button" onclick="deleteArticle()" class="btn btn-danger">Да</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        loadArticles()
+
+        function loadArticles() {
+            let req = new XMLHttpRequest()
+            req.open("GET", "http://localhost:8080/api/article/all")
+            req.onload = function () {
+                let html = ""
+                let articles = JSON.parse(req.responseText)
+                html += "<table class='table'>"
+                html += "<thead>"
+                html += "<tr>"
+                html += "<th>Id</th>"
+                html += "<th>Title</th>"
+                html += "<th>Description</th>"
+                html += "<th>Delete</th>"
+                html += "</tr>"
+                html += "</thead>"
+                html += "<tbody>"
+                for (let i = 0; i < articles.length; i++) {
+                    html += "<tr>"
+                    html += "<td>" + articles[i].id + "</td>"
+                    html += "<td>" + articles[i].title + "</td>"
+                    html += "<td>" + articles[i].description + "</td>"
+                    html += "<td><button onclick='deleteArticleModal(" + articles[i].id + ")' class='btn btn-secondary'>Delete</button></td>"
+                    html += "</tr>"
+                }
+                html += "</tbody>"
+                html += "</table>"
+                document.getElementById("allarticles").innerHTML = html
+            }
+            req.send()
+        }
+
+        function deleteArticleModal(articleId) {
+            document.getElementById('articleId').value = articleId
+            const myModal = new bootstrap.Modal("#deleteArticleModal", {backdrop: true, focus: true, keyboard: true})
+            myModal.show();
+        }
+
+        function deleteArticle() {
+            let req = new XMLHttpRequest()
+            let id = document.getElementById('articleId').value
+            req.open("DELETE", "http://localhost:8080/api/article/delete/" + id)
+            req.send()
+            req.onload = function () {
+                if (req.status === 200) {
+                    window.location.href = "http://localhost:8080/allarticles"
+                } else if (req.status === 400) {
+                    alert(req.response)
+                }
+            }
+        }
+    </script>
+</div>
+</html>

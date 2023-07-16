@@ -9,23 +9,23 @@ import org.mapstruct.Mapping;
 
 import java.util.List;
 
-@Mapper(componentModel = "spring")
+@Mapper(componentModel = "spring", uses = UserMapper.class)
 public interface ArticleMapper {
 
-    @Mapping(source = "author.id", target = "authorId")
-    ArticleCreate toDto(Article article);
+//    @Mapping(source = "author.id", target = "authorId")
+//    ArticleCreate toDto(Article article);
 
-    @Mapping(source = "author.id", target = "authorId")
+    @Mapping(source = "author", target = "author")
     ArticleView toView(Article article);
 
-    @Mapping(source = "author.id", target = "authorId")
+    @Mapping(source = "author", target = "author")
     List<ArticleView> toViewList(List<Article> articles);
 
     @Mapping(source = "authorId", target = "author.id")
     Article toEntity(ArticleCreate articleCreate);
 
-    @Mapping(source = "authorId", target = "author.id")
-    Article toEntity(ArticleView articleView);
+//    @Mapping(source = "authorId", target = "author.id")
+//    Article toEntity(ArticleView articleView);
 
     @Mapping(source = "authorId", target = "author.id")
     Article toEntity(ArticleUpdate articleUpdate);
