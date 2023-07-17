@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="layout/main.html">
+<div layout:fragment="content">
+    <main class="container">
+            <div class="row g-5">
+                <div class="col-md-8">
+                    <div class="mb-3">
+                        <input class="form-control" type="search" id="query" name="query" placeholder="Поиск">
+                    </div>
+                    <div class="mb-3">
+                        <label for="searchInText" class="form-label">Искать в тексте</label>
+                        <input class="form-check-input" type="checkbox" id="searchInText" name="searchInText">
+                        <label for="searchInTitle" class="form-label ms-2">в заголовках</label>
+                        <input class="form-check-input" type="checkbox" id="searchInTitle" name="searchInTitle">
+                        <label for="searchByAuthor" class="form-label ms-2">по автору</label>
+                        <input class="form-check-input" type="checkbox" id="searchByAuthor" name="searchByAuthor">
+                    </div>
+                    <button type="button" class="btn btn-primary" onclick="search()">Поиск</button>
+                    <div class="row mt-3">
+                        <div class="col" id="articles"></div>
+                    </div>
+                </div>
+                <div class="col-md-4" th:insert="~{layout/sidebar}"></div>
+            </div>
+    </main>
+    <script type="text/javascript">
+
+        function loadArticles(articles) {
+                let html = ""
+                if (articles.length === 0) {
+                    html += "<h4 class='text-center'>По вашему запросу ничего не найдено.</h4>"
+                } else {
+                    for (let i = 0; i < articles.length; i++) {
+                        let optionsDate = {year: 'numeric', month: 'long', day: 'numeric'}
+                        let optionsTime = {hour: 'numeric', minute: 'numeric'}
+                        let formattedDate = new Date(articles[i].postTime).toLocaleDateString("ru-RU", optionsDate)
+                        let formattedTime = new Date(articles[i].postTime).toLocaleTimeString("ru-RU", optionsTime)
+                        formattedDate = formattedDate.replaceAll(" г.", " ")
+                        html += "<article class='blog-post'>"
+                        html += "<h4 class='display-5 link-body-emphasis mb-1'>" + articles[i].title + "</h4>"
+                        html += "<p class='blog-post-meta'>"
+                        html += "<span>" + formattedDate + formattedTime + "</span>"
+                        html += "<span> автор </span>"
+                        html += "<a href='/author/" + articles[i].author.id + "'>" + articles[i].author.fullName + "</a>"
+                        html += "</p>"
+                        html += "<p>" + articles[i].description + "</p>"
+                        html += "<p><a href='/article/" + articles[i].id + "'>Подробнее...</a></p>"
+                        html += "<hr>"
+                        html += "</article>"
+                    }
+                }
+                document.getElementById("articles").innerHTML = html
+        }
+        function search(){
+            let req = new XMLHttpRequest()
+            let query = document.getElementById("query").value
+            if (!query) {
+                alert("Введите текст для поиска");
+                return;
+            }
+            let searchInText = document.getElementById("searchInText").checked
+            let searchInTitle = document.getElementById("searchInTitle").checked
+            let searchByAuthor = document.getElementById("searchByAuthor").checked
+            let searchQuery = {
+                "query" : query,
+                "searchInText" : searchInText,
+                "searchInTitle" : searchInTitle,
+                "searchByAuthor" : searchByAuthor,
+            }
+            req.open("POST", "http://localhost:8080/api/article/search")
+            req.setRequestHeader("Content-type", "application/json")
+            req.send(JSON.stringify(searchQuery))
+            req.onload = function () {
+                if (req.status === 200) {
+                    let results = JSON.parse(req.responseText)
+
+                    loadArticles(results)
+                } else if (req.status === 400) {
+                    alert("Error" + req.response)
+                }
+            }
+        }
+    </script>
+</div>
+</html>

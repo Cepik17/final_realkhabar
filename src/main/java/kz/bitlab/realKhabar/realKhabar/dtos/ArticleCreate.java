@@ -1,10 +1,8 @@
 package kz.bitlab.realKhabar.realKhabar.dtos;
 
 import lombok.Getter;
-import lombok.NonNull;
 import lombok.Setter;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Getter

@@ -2,11 +2,10 @@ package kz.bitlab.realKhabar.realKhabar.controllers;
 
 import kz.bitlab.realKhabar.realKhabar.dtos.ArticleView;
 import kz.bitlab.realKhabar.realKhabar.models.User;
-import kz.bitlab.realKhabar.realKhabar.repositories.ArticleRepository;
 import kz.bitlab.realKhabar.realKhabar.services.ArticleService;
 import kz.bitlab.realKhabar.realKhabar.services.UserService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.security.access.prepost.PostAuthorize;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -23,27 +22,55 @@ public class MainController {
     private final ArticleService articleService;
 
 
-    @GetMapping("/")
-    public String homePage(Model model){
-        List<ArticleView> allArticles = articleService.getAllArticles();
+//    @GetMapping("/")
+//    public String homePage(Model model){
+//        Page<ArticleView> allArticlesPage = articleService.getAllArticles(0,5);
+//        //  List<ArticleView> allArticles = allArticlesPage.getContent();
+//        ArticleView articleView = articleService.findByNewsOfTheDayIsTrue();
+//        List<ArticleView> lastArticles = articleService.getLastArticles();
+//        model.addAttribute("articleOfTheDay", articleView);
+//        model.addAttribute("articles", allArticlesPage);
+//        model.addAttribute("lastArticles", lastArticles);
+//        model.addAttribute("pageNumber", 1);
+//        return "home";
+//    }
+//
+//    @GetMapping("/page/{pageNumber}")
+//    public String articlesPage(@PathVariable int pageNumber, Model model){
+//        Page<ArticleView> allArticles = articleService.getAllArticles(pageNumber, 5);
+//        ArticleView articleView = articleService.findByNewsOfTheDayIsTrue();
+//        List<ArticleView> lastArticles = articleService.getLastArticles();
+//        model.addAttribute("articleOfTheDay", articleView);
+//        model.addAttribute("articles", allArticles);
+//        model.addAttribute("lastArticles", lastArticles);
+//        model.addAttribute("pageNumber", pageNumber);
+//        return "home";
+//    }
+
+    @GetMapping({"/", "/page/{pageNumber}"})
+    public String articlesPage(@PathVariable(required = false) Integer pageNumber, Model model) {
+        int currentPage = (pageNumber != null) ? pageNumber - 1 : 0;
+        Page<ArticleView> allArticles = articleService.getAllArticles(currentPage, 5);
         ArticleView articleView = articleService.findByNewsOfTheDayIsTrue();
         List<ArticleView> lastArticles = articleService.getLastArticles();
         model.addAttribute("articleOfTheDay", articleView);
         model.addAttribute("articles", allArticles);
         model.addAttribute("lastArticles", lastArticles);
+        model.addAttribute("pageNumber", currentPage + 1);
         return "home";
     }
 
     @GetMapping("/category/{categoryId}")
-    public String categoryPage(@PathVariable Long categoryId, Model model){
+    public String categoryPage(@PathVariable Long categoryId, Model model) {
         List<ArticleView> lastArticles = articleService.getLastArticles();
         model.addAttribute("lastArticles", lastArticles);
         model.addAttribute("categoryId", categoryId);
         return "category";
     }
 
+
     @GetMapping("/author/{authorId}")
-    public String articlesByAuthorPage(@PathVariable Long authorId, Model model){
+    public String articlesByAuthorPage(@PathVariable Long authorId, Model model) {
         List<ArticleView> lastArticles = articleService.getLastArticles();
         model.addAttribute("lastArticles", lastArticles);
         model.addAttribute("authorId", authorId);
@@ -52,41 +79,49 @@ public class MainController {
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/myarticles")
-    public String myArticlePage(Model model){
-        User user =userService.getCurrentUser();
+    public String myArticlePage(Model model) {
+        User user = userService.getCurrentUser();
         model.addAttribute("currentUser", user);
         return "myarticles";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/addarticle")
-    public String addArticlePage(Model model){
-        User user =userService.getCurrentUser();
+    public String addArticlePage(Model model) {
+        User user = userService.getCurrentUser();
         model.addAttribute("currentUser", user);
         return "addarticle";
     }
 
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/article/{id}")
-    public String articlePage(@PathVariable Long id, Model model){
+    public String articlePage(@PathVariable Long id, Model model) {
         List<ArticleView> lastArticles = articleService.getLastArticles();
         model.addAttribute("lastArticles", lastArticles);
         model.addAttribute("articleId", id);
-        User user =userService.getCurrentUser();
+        User user = userService.getCurrentUser();
         model.addAttribute("currentUser", user);
         return "article";
     }
 
     @PreAuthorize("hasAnyRole('ROLE_Admin')")
     @GetMapping("/allarticles")
-    public String allArticlePage(Model model){
-        User user =userService.getCurrentUser();
+    public String allArticlePage(Model model) {
+        User user = userService.getCurrentUser();
         model.addAttribute("currentUser", user);
         return "allarticles";
     }
 
     @GetMapping("/forbidden")
-    public String accessDeniedPage(){
+    public String accessDeniedPage() {
         return "403";
     }
+
+    @GetMapping("/search")
+    public String searchResult(Model model) {
+        List<ArticleView> lastArticles = articleService.getLastArticles();
+        model.addAttribute("lastArticles", lastArticles);
+        return "search";
+    }
+
 }

@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
       layout:decorate="layout/main.html">
 <div layout:fragment="content">
     <main class="container">
@@ -9,43 +8,35 @@
              th:style="'background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('+${articleOfTheDay.getImgUrl()}+'); background-size: cover;'">
             <div class="col-lg-6 px-0 text-white">
                 <h2 class="display-4 fst-italic" th:text="${articleOfTheDay.getTitle()}"></h2>
-                <p class="lead my-3"  th:text="${articleOfTheDay.getDescription()}"></p>
-                <p class="lead mb-0"><a th:href="${'/article/'+articleOfTheDay.getId()}" class="fw-bold text-white">Подробнее...</a></p>
+                <p class="lead my-3" th:text="${articleOfTheDay.getDescription()}"></p>
+                <p class="lead mb-0"><a th:href="${'/article/'+articleOfTheDay.getId()}" class="fw-bold text-white">Подробнее...</a>
+                </p>
             </div>
         </div>
         <div class="row g-5">
             <div class="col-md-8">
-                <article class="blog-post" th:each="article :${articles}">
+                <article class="blog-post" th:each="article :${articles.getContent()}">
                     <h4 class="display-5 link-body-emphasis mb-1" th:text="${article.getTitle()}"></h4>
                     <p class="blog-post-meta">
                         <span th:text="${#temporals.format(article.postTime, 'dd MMMM yyyy HH:mm')}"></span>
-
-<!--                        <span th:text="${article.getPostTime()}"></span>-->
                         <span> автор </span>
-                        <a th:href="${'/author/' + article.getAuthor().getId()}" th:text="${article.getAuthor().fullName}"></a>
+                        <a th:href="${'/author/' + article.getAuthor().getId()}"
+                           th:text="${article.getAuthor().fullName}"></a>
                     </p>
                     <p th:text="${article.getDescription()}"></p>
                     <p><a th:href="${'/article/'+article.getId()}">Подробнее...</a></p>
                     <hr>
                 </article>
-
                 <nav class="blog-pagination" aria-label="Pagination">
-                    <a class="btn btn-outline-primary rounded-pill" href="#">Older</a>
-                    <a class="btn btn-outline-secondary rounded-pill disabled">Newer</a>
+                    <a class="btn btn-outline-secondary rounded-pill" th:if="${articles.hasNext()}"
+                       th:href="@{'/page/'+ ${pageNumber + 1}}">В прошлое</a>
+                    <a class="btn btn-outline-secondary rounded-pill" th:if="${articles.hasPrevious()}"
+                       th:href="@{'/page/'+${pageNumber - 1}}">В будущее</a>
                 </nav>
-
             </div>
-
             <div class="col-md-4" th:insert="~{layout/sidebar}">
             </div>
         </div>
-
     </main>
-    <footer class="py-5 text-center text-body-secondary bg-body-tertiary">
-        <p>Blog built with <a href="https://getbootstrap.com/">Bootstrap</a>.</p>
-        <p class="mb-0">
-            <a href="#">Back to top</a>
-        </p>
-    </footer>
 </div>
 </html>

@@ -1,10 +1,7 @@
 package kz.bitlab.realKhabar.realKhabar.services;
 
-import kz.bitlab.realKhabar.realKhabar.dtos.ArticleView;
 import kz.bitlab.realKhabar.realKhabar.models.User;
 import org.springframework.security.core.userdetails.UserDetailsService;
-
-import java.util.List;
 
 public interface UserService extends UserDetailsService {
     User getCurrentUser();
@@ -15,7 +12,7 @@ public interface UserService extends UserDetailsService {
 
     String editRole(String email, Long roleId);
 
-    String deleteUser(String email);
+    String setUserDisabled(String email);
 
     User getUserById(Long userId);
 

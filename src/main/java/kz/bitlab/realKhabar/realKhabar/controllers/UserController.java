@@ -51,7 +51,7 @@ public class UserController {
         return "redirect:/" + value;
     }
 
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasAuthority('ROLE_Admin')")
     @PostMapping("/editrole")
     public String editRole(@RequestParam String email,
                            @RequestParam Long roleId) {
@@ -60,10 +60,10 @@ public class UserController {
 
     }
 
-    @PreAuthorize("hasAuthority('Admin')")
+    @PreAuthorize("hasAuthority('ROLE_Admin')")
     @PostMapping("/deleteuser")
-    public String deleteUser(@RequestParam String email) {
-        String value = userService.deleteUser(email);
+    public String setDisable(@RequestParam String email) {
+        String value = userService.setUserDisabled(email);
         return "redirect:/" + value;
     }
 }

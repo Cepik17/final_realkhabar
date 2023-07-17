@@ -2,23 +2,23 @@ package kz.bitlab.realKhabar.realKhabar.services.impl;
 
 import kz.bitlab.realKhabar.realKhabar.dtos.*;
 import kz.bitlab.realKhabar.realKhabar.mappers.ArticleMapper;
-import kz.bitlab.realKhabar.realKhabar.mappers.CategoryMapper;
 import kz.bitlab.realKhabar.realKhabar.mappers.CommentMapper;
-import kz.bitlab.realKhabar.realKhabar.mappers.UserMapper;
-import kz.bitlab.realKhabar.realKhabar.models.Article;
-import kz.bitlab.realKhabar.realKhabar.models.Category;
-import kz.bitlab.realKhabar.realKhabar.models.Comment;
-import kz.bitlab.realKhabar.realKhabar.models.User;
+import kz.bitlab.realKhabar.realKhabar.models.*;
 import kz.bitlab.realKhabar.realKhabar.repositories.ArticleRepository;
 import kz.bitlab.realKhabar.realKhabar.repositories.CategoryRepository;
 import kz.bitlab.realKhabar.realKhabar.services.ArticleService;
 import kz.bitlab.realKhabar.realKhabar.services.CommentService;
 import kz.bitlab.realKhabar.realKhabar.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -43,8 +43,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Autowired
     private CommentService commentService;
 
-    @Autowired
-    private CategoryMapper categoryMapper;
 
     @Override
     public ArticleView addNewArticle(ArticleCreate articleCreate) {
@@ -72,14 +70,19 @@ public class ArticleServiceImpl implements ArticleService {
         article.setNewsOfTheDay(articleCreate.isNewsOfTheDay());
         article.setCategories(categories);
         articleRepository.save(article);
-
         return articleMapper.toView(article);
     }
 
     @Override
-    public List<ArticleView> getAllArticles() {
-        List <Article> articles =   articleRepository.getAllByOrderByPostTimeDesc();
-        return articleMapper.toViewList(articles);
+    public Page<ArticleView> getAllArticles(int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "postTime"));
+        Page<Article> articles = articleRepository.getPageByOrderByPostTimeDesc(pageable);
+        return articles.map(articleMapper::toView);
+    }
+
+    @Override
+    public List<ArticleView> getArticlesList() {
+        return articleMapper.toViewList(articleRepository.findAll());
     }
 
     @Override
@@ -102,7 +105,6 @@ public class ArticleServiceImpl implements ArticleService {
     @Override
     public ArticleView updateArticle(ArticleUpdate articleUpdate) {
         LocalDateTime now = LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES);
-        List<Category> categories = categoryRepository.findAllById(articleUpdate.getCategoryId());
         if (articleUpdate.getTitle() == null || articleUpdate.getTitle().isEmpty()) {
             throw new IllegalArgumentException("Title cannot be empty");
         }
@@ -121,7 +123,17 @@ public class ArticleServiceImpl implements ArticleService {
             articleRepository.resetNewsOfTheDay();
         }
         article.setNewsOfTheDay(articleUpdate.isNewsOfTheDay());
-        article.setCategories(categories);
+        List<Category> categories = categoryRepository.findAllById(articleUpdate.getCategoryId());
+        List<Category> newCategories = new ArrayList<>();
+        if (article.getCategories() == null) {
+            article.setCategories(new ArrayList<>());
+        }
+        for (Category category : categories) {
+            if (!article.getCategories().contains(category)) {
+                newCategories.add(category);
+            }
+        }
+        article.setCategories(newCategories);
         articleRepository.save(article);
         return articleMapper.toView(article);
     }
@@ -142,23 +154,41 @@ public class ArticleServiceImpl implements ArticleService {
     }
 
     @Override
-    public List<ArticleView> getArticlesByCategory(Long id) {
-        Category category = categoryRepository.findById(id).orElseThrow();
-        CategoryDto categoryDto = categoryMapper.toDto(category);
-        List<Article> articles = articleRepository.getAllArticlesByCategoryId(category.getName());
-        return articleMapper.toViewList(articles);
+    public Page<ArticleView> getArticlesByCategory(Long categoryId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "postTime"));
+        Page<Article> articlesPage = articleRepository.getAllArticlesByCategoryId(categoryId, pageable);
+        return articlesPage.map(articleMapper::toView);
     }
 
     @Override
-    public List<ArticleView> getAllByAuthorId(Long authorId) {
-        List<Article> articles = articleRepository.getAllByAuthorId(authorId);
-        return articleMapper.toViewList(articles);
+    public Page<ArticleView> getArticlesByAuthorId(Long authorId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "postTime"));
+        Page<Article> articlesPage = articleRepository.getAllByAuthorId(authorId, pageable);
+        return articlesPage.map(articleMapper::toView);
     }
 
     @Override
     public List<ArticleView> getLastArticles() {
-        List<ArticleView> articles = getAllArticles();
+        List<ArticleView> articles = articleMapper.toViewList(articleRepository.getAllByOrderByPostTimeDesc());
         return articles.subList(0, Math.min(articles.size(), 3));
+    }
+
+    @Override
+    public List<ArticleView> searchArticle(SearchQuery query) {
+        List<Article> articles = new ArrayList<>();
+        if (query.isSearchInText()) {
+            articles.addAll(articleRepository.getByTextContainingIgnoreCase(query.getQuery()));
+        }
+        if (query.isSearchInTitle()) {
+            articles.addAll(articleRepository.getByTitleContainingIgnoreCase(query.getQuery()));
+        }
+        if (query.isSearchByAuthor()) {
+            articles.addAll(articleRepository.getByAuthorName(query.getQuery()));
+        }
+        if (!query.isSearchInText() && !query.isSearchInTitle() && !query.isSearchByAuthor()) {
+            articles = articleRepository.getByTextContainingIgnoreCase(query.getQuery());
+        }
+        return articleMapper.toViewList(articles);
     }
 
     @Override

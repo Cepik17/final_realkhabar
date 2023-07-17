@@ -96,7 +96,7 @@
         }
 
         function editArticleModal(articleId) {
-            let req = new XMLHttpRequest();
+            let req = new XMLHttpRequest()
             req.open("GET", "http://localhost:8080/api/article/" + articleId);
             req.onload = function () {
                 let article = JSON.parse(req.responseText)
@@ -107,9 +107,9 @@
                 document.getElementById("isNewsOfTheDay").checked = article.isNewsOfTheDay
                 document.getElementById("imgUrl").value = article.imgUrl
                 const myModal = new bootstrap.Modal("#editArticleModal", {backdrop: true, focus: true, keyboard: true})
-                myModal.show();
+                myModal.show()
             }
-            req.send();
+            req.send()
         }
 
         function updateArticle(){
@@ -138,7 +138,5 @@
             }
         }
     </script>
-
-
 </div>
 </html>

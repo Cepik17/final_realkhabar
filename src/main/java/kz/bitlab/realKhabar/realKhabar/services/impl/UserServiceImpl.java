@@ -30,7 +30,6 @@ public class UserServiceImpl implements UserService {
     private PasswordEncoder passwordEncoder;
 
 
-
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         User user = userRepository.findByEmail(username);
@@ -60,9 +59,10 @@ public class UserServiceImpl implements UserService {
                 user.setFullName(fullName);
                 user.setEmail(email);
                 user.setPassword(passwordEncoder.encode(password));
-                Role role = roleRepository.findByName("User");
+                Role role = roleRepository.findByName("ROLE_User");
                 List<Role> roles = List.of(role);
                 user.setRoles(roles);
+                user.setEnabled(true);
                 userRepository.save(user);
                 redirectValue = "signup?success";
             }
@@ -90,7 +90,7 @@ public class UserServiceImpl implements UserService {
         String redirectValue = "profile?editerror";
         User user = userRepository.findByEmail(email);
         if (user != null) {
-            List<Role> roles= roleRepository.findRolesById(roleId);
+            List<Role> roles = roleRepository.findRolesById(roleId);
             user.setRoles(roles);
             userRepository.save(user);
             redirectValue = "profile?editsuccess";
@@ -99,13 +99,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String deleteUser(String email) {
+    public String setUserDisabled(String email) {
         String redirectValue = "profile?errordelete";
         User user = userRepository.findByEmail(email);
         if (user != null) {
-//            Long id = user.getId();
-//            userRepository.deleteById(id);
-            userRepository.delete(user);
+            user.setEnabled(false);
+            userRepository.save(user);
             redirectValue = "profile?successdelete";
         }
         return redirectValue;

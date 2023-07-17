@@ -1,6 +1,5 @@
 package kz.bitlab.realKhabar.realKhabar.controllers;
 
-import kz.bitlab.realKhabar.realKhabar.dtos.UserView;
 import kz.bitlab.realKhabar.realKhabar.services.ArticleService;
 import kz.bitlab.realKhabar.realKhabar.services.UserService;
 import lombok.RequiredArgsConstructor;
@@ -15,10 +14,10 @@ import org.springframework.web.bind.annotation.RestController;
 public class UserRestController {
 
     private final UserService userService;
-    private final ArticleService articleService;
 
     @GetMapping("{authorId}")
-    public String getFullNameByAuthorId(@PathVariable Long authorId){
+    public String getFullNameByAuthorId(@PathVariable Long authorId) {
         return userService.getFullNameByAuthorId(authorId);
     }
+
 }

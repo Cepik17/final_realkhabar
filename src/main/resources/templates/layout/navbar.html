@@ -5,15 +5,17 @@
         <div class="row flex-nowrap justify-content-between align-items-center">
             <div class="col-4 pt-1">
                 <a class="link-secondary" th:href="@{'/signin'}" sec:authorize="isAnonymous()">Войти</a>
-<!--                <a class="link-secondary" th:href="@{'/profile'}">Мой Профиль</a>-->
                 <div class="dropdown" sec:authorize="isAuthenticated()">
-                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    <button class="btn btn-sm btn-outline-secondary dropdown-toggle" type="button"
+                            data-bs-toggle="dropdown" aria-expanded="false">
                         Профиль
                     </button>
                     <ul class="dropdown-menu">
                         <li><a class="dropdown-item" th:href="@{'/profile'}">Настройки</a></li>
-                        <li><a class="dropdown-item" th:href="@{'/myarticles'}" sec:authorize="hasAuthority('ROLE_Author')">Мои статьи</a></li>
-                        <li><a class="dropdown-item" th:href="@{'/allarticles'}" sec:authorize="hasAuthority('ROLE_Admin')">Все статьи</a></li>
+                        <li><a class="dropdown-item" th:href="@{'/myarticles'}"
+                               sec:authorize="hasAuthority('ROLE_Author')">Мои статьи</a></li>
+                        <li><a class="dropdown-item" th:href="@{'/allarticles'}"
+                               sec:authorize="hasAuthority('ROLE_Admin')">Все статьи</a></li>
                     </ul>
                 </div>
             </div>
@@ -21,17 +23,19 @@
                 <a class="blog-header-logo text-body-emphasis text-decoration-none" th:href="@{'/'}">Real Khabar</a>
             </div>
             <div class="col-4 d-flex justify-content-end align-items-center">
-                <a class="link-secondary" href="#" aria-label="Search">
+                <a class="link-secondary" aria-label="Search" th:href="@{'/search'}">
                     <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor"
                          stroke-linecap="round" stroke-linejoin="round" stroke-width="2" class="mx-3" role="img"
-                         viewBox="0 0 24 24"><title>Search</title><circle cx="10.5" cy="10.5" r="7.5"/><path d="M21 21l-5.2-5.2"/></svg>
+                         viewBox="0 0 24 24"><title>Search</title>
+                        <circle cx="10.5" cy="10.5" r="7.5"/>
+                        <path d="M21 21l-5.2-5.2"/>
+                    </svg>
                 </a>
                 <a class="btn btn-sm btn-outline-secondary" th:href="@{'/signup'}" sec:authorize="isAnonymous()">Регистрация</a>
                 <a class="btn btn-sm btn-outline-secondary" th:href="@{'/logout'}" sec:authorize="isAuthenticated()">Выйти</a>
             </div>
         </div>
     </header>
-
     <div class="nav-scroller py-1 mb-3 border-bottom">
         <nav class="nav nav-underline justify-content-between">
             <a class="nav-item nav-link link-body-emphasis" th:href="@{'/category/1'}">Мир</a>

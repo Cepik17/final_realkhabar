@@ -1,10 +1,8 @@
 package kz.bitlab.realKhabar.realKhabar.services;
 
 import kz.bitlab.realKhabar.realKhabar.dtos.*;
-import kz.bitlab.realKhabar.realKhabar.models.Article;
-import kz.bitlab.realKhabar.realKhabar.models.Category;
+import kz.bitlab.realKhabar.realKhabar.models.SearchQuery;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -12,7 +10,9 @@ public interface ArticleService {
 
     ArticleView addNewArticle(ArticleCreate articleCreate);
 
-    List<ArticleView> getAllArticles();
+    Page<ArticleView> getAllArticles(int page, int size);
+
+    List<ArticleView> getArticlesList();
 
     List<ArticleView> findArticlesByUserId(Long userId);
 
@@ -26,11 +26,13 @@ public interface ArticleService {
 
     List<CommentDto> getCommentsByArticleId(Long article);
 
-    List<ArticleView> getArticlesByCategory(Long id);
+    Page<ArticleView> getArticlesByCategory(Long categoryId, int page, int size);
 
-    List<ArticleView> getAllByAuthorId(Long authorId);
+    Page<ArticleView> getArticlesByAuthorId(Long authorId, int page, int size);
 
     List<ArticleView> getLastArticles();
+
+    List<ArticleView> searchArticle(SearchQuery query);
 
     void deleteArticle(Long articleId);
 }
