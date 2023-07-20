@@ -23,4 +23,6 @@ public interface ArticleMapper {
 
     @Mapping(source = "authorId", target = "author.id")
     Article toEntity(ArticleUpdate articleUpdate);
+
+    Article toEntity(ArticleView articleView);
 }

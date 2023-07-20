@@ -21,32 +21,6 @@ public class MainController {
     private final UserService userService;
     private final ArticleService articleService;
 
-
-//    @GetMapping("/")
-//    public String homePage(Model model){
-//        Page<ArticleView> allArticlesPage = articleService.getAllArticles(0,5);
-//        //  List<ArticleView> allArticles = allArticlesPage.getContent();
-//        ArticleView articleView = articleService.findByNewsOfTheDayIsTrue();
-//        List<ArticleView> lastArticles = articleService.getLastArticles();
-//        model.addAttribute("articleOfTheDay", articleView);
-//        model.addAttribute("articles", allArticlesPage);
-//        model.addAttribute("lastArticles", lastArticles);
-//        model.addAttribute("pageNumber", 1);
-//        return "home";
-//    }
-//
-//    @GetMapping("/page/{pageNumber}")
-//    public String articlesPage(@PathVariable int pageNumber, Model model){
-//        Page<ArticleView> allArticles = articleService.getAllArticles(pageNumber, 5);
-//        ArticleView articleView = articleService.findByNewsOfTheDayIsTrue();
-//        List<ArticleView> lastArticles = articleService.getLastArticles();
-//        model.addAttribute("articleOfTheDay", articleView);
-//        model.addAttribute("articles", allArticles);
-//        model.addAttribute("lastArticles", lastArticles);
-//        model.addAttribute("pageNumber", pageNumber);
-//        return "home";
-//    }
-
     @GetMapping({"/", "/page/{pageNumber}"})
     public String articlesPage(@PathVariable(required = false) Integer pageNumber, Model model) {
         int currentPage = (pageNumber != null) ? pageNumber - 1 : 0;
@@ -67,7 +41,6 @@ public class MainController {
         model.addAttribute("categoryId", categoryId);
         return "category";
     }
-
 
     @GetMapping("/author/{authorId}")
     public String articlesByAuthorPage(@PathVariable Long authorId, Model model) {

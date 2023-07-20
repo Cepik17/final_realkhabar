@@ -22,9 +22,9 @@ public interface ArticleService {
 
     ArticleView updateArticle(ArticleUpdate articleUpdate);
 
-    List<CategoryDto> getCategoriesByArticleId(Long articleId);
+   // List<CategoryDto> getCategoriesByArticleId(Long articleId);
 
-    List<CommentDto> getCommentsByArticleId(Long article);
+   // List<CommentDto> getCommentsByArticleId(Long article);
 
     Page<ArticleView> getArticlesByCategory(Long categoryId, int page, int size);
 

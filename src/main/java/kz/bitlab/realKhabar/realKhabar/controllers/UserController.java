@@ -61,7 +61,7 @@ public class UserController {
     }
 
     @PreAuthorize("hasAuthority('ROLE_Admin')")
-    @PostMapping("/deleteuser")
+    @PostMapping("/disableuser")
     public String setDisable(@RequestParam String email) {
         String value = userService.setUserDisabled(email);
         return "redirect:/" + value;

@@ -74,23 +74,23 @@
             <hr class="my-4">
             <div class="alert alert-danger alert-dismissible fade show" role="alert"
                  th:if="${param.errordelete != null}">
-                <strong>Не удалось удалить пользователся</strong>
+                <strong>Не удалось деактивировать пользователся</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div class="alert alert-success alert-dismissible fade show" role="alert"
                  th:if="${param.successdelete != null}">
-                <strong>Пользователь успешно удален</strong>
+                <strong>Пользователь успешно деактивирован</strong>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
             <div class="mb-3">
-                <h5>Удалить пользователя</h5>
+                <h5>Деактивировать пользователя</h5>
             </div>
-            <form th:action="@{'/deleteuser'}" method="post">
+            <form th:action="@{'/disableuser'}" method="post">
                 <div class="mb-3">
                     <label class="form-label" for="id4">Email</label>
                     <input class="form-control" type="email" id="id4" name="email">
                 </div>
-                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Удалить</button>
+                <button type="button" class="btn btn-danger" data-bs-toggle="modal" data-bs-target="#exampleModal">Деактивировать</button>
                 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
                     <div class="modal-dialog">
                         <div class="modal-content">

@@ -62,11 +62,11 @@
                 let article = JSON.parse(req.responseText)
                 let authorFullName = article.author.fullName
                 let categoriesReq = new XMLHttpRequest();
-                categoriesReq.open("GET", "http://localhost:8080/api/article/" + articleId + "/categories");
+                categoriesReq.open("GET", "http://localhost:8080/api/category/" + articleId);
                 categoriesReq.onload = function () {
                     let categories = JSON.parse(categoriesReq.responseText);
                     let commentsReq = new XMLHttpRequest();
-                    commentsReq.open("GET", "http://localhost:8080/api/article/" + articleId + "/comments");
+                    commentsReq.open("GET", "http://localhost:8080/api/comments/" + articleId);
                     commentsReq.onload = function () {
                         let comments = JSON.parse(commentsReq.responseText);
                         let optionsDate = {year: 'numeric', month: 'long', day: 'numeric'}

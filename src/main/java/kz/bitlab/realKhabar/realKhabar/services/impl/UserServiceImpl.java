@@ -17,7 +17,6 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-
 public class UserServiceImpl implements UserService {
 
     @Autowired
@@ -28,7 +27,6 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {

@@ -1,6 +1,8 @@
 package kz.bitlab.realKhabar.realKhabar.controllers;
 
-import kz.bitlab.realKhabar.realKhabar.dtos.*;
+import kz.bitlab.realKhabar.realKhabar.dtos.ArticleCreate;
+import kz.bitlab.realKhabar.realKhabar.dtos.ArticleUpdate;
+import kz.bitlab.realKhabar.realKhabar.dtos.ArticleView;
 import kz.bitlab.realKhabar.realKhabar.models.SearchQuery;
 import kz.bitlab.realKhabar.realKhabar.services.ArticleService;
 import lombok.RequiredArgsConstructor;
@@ -47,19 +49,14 @@ public class ArticleController {
         }
     }
 
-    @GetMapping("{articleId}/categories")
-    public List<CategoryDto> getCategoriesByArticleId(@PathVariable Long articleId) {
-        return articleService.getCategoriesByArticleId(articleId);
-    }
+//    @GetMapping("{articleId}/categories")
+//    public List<CategoryDto> getCategoriesByArticleId(@PathVariable Long articleId) {
+//        return categoryService.getCategoriesByArticleId(articleId);
+//    }
 
-    @GetMapping("{articleId}/comments")
-    public List<CommentDto> getCommentsByArticleId(@PathVariable Long articleId) {
-        return articleService.getCommentsByArticleId(articleId);
-    }
-
-//    @GetMapping("/category/{categoryId}")
-//    public List<ArticleView> getAllArticleByCategory(@PathVariable Long categoryId){
-//        return articleService.getArticlesByCategory(categoryId);
+//    @GetMapping("{articleId}/comments")
+//    public List<CommentDto> getCommentsByArticleId(@PathVariable Long articleId) {
+//        return articleService.getCommentsByArticleId(articleId);
 //    }
 
     @GetMapping("/category/{categoryId}/page/{pageNumber}")
@@ -67,20 +64,11 @@ public class ArticleController {
         return articleService.getArticlesByCategory(categoryId, pageNumber - 1, 5);
     }
 
-//    @GetMapping("/author/{authorId}")
-//    public List<ArticleView> getAllArticleByAuthor(@PathVariable Long authorId){
-//        return articleService.getAllByAuthorId(authorId);
-//    }
-
     @GetMapping("/author/{authorId}/page/{pageNumber}")
     public Page<ArticleView> getAllArticleByAuthor(@PathVariable Long authorId, @PathVariable int pageNumber) {
         return articleService.getArticlesByAuthorId(authorId, pageNumber - 1, 5);
     }
 
-    //    @GetMapping("/all")
-//    public List<ArticleView> getAllArticles(){
-//        return  articleService.getAllArticles();
-//    }
     @GetMapping("/all")
     public Page<ArticleView> getAllArticles(
             @RequestParam(name = "page", defaultValue = "0") int page,
