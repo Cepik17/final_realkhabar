@@ -1,6 +1,7 @@
 package kz.bitlab.realKhabar.realKhabar.services.impl;
 
 import kz.bitlab.realKhabar.realKhabar.dtos.ArticleView;
+import kz.bitlab.realKhabar.realKhabar.dtos.SearchQuery;
 import kz.bitlab.realKhabar.realKhabar.models.*;
 import kz.bitlab.realKhabar.realKhabar.repositories.ArticleRepository;
 import kz.bitlab.realKhabar.realKhabar.repositories.CategoryRepository;

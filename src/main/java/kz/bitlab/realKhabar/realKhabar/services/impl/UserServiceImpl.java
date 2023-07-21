@@ -58,8 +58,13 @@ public class UserServiceImpl implements UserService {
                 user.setEmail(email);
                 user.setPassword(passwordEncoder.encode(password));
                 Role role = roleRepository.findByName("ROLE_User");
-                List<Role> roles = List.of(role);
-                user.setRoles(roles);
+                if (role == null) {
+                    role = new Role();
+                    role.setName("ROLE_User");
+                    roleRepository.save(role);
+                }
+                user.setRoles(List.of(role));
+
                 user.setEnabled(true);
                 userRepository.save(user);
                 redirectValue = "signup?success";

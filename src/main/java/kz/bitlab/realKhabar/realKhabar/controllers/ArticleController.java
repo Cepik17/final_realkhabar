@@ -3,7 +3,7 @@ package kz.bitlab.realKhabar.realKhabar.controllers;
 import kz.bitlab.realKhabar.realKhabar.dtos.ArticleCreate;
 import kz.bitlab.realKhabar.realKhabar.dtos.ArticleUpdate;
 import kz.bitlab.realKhabar.realKhabar.dtos.ArticleView;
-import kz.bitlab.realKhabar.realKhabar.models.SearchQuery;
+import kz.bitlab.realKhabar.realKhabar.dtos.SearchQuery;
 import kz.bitlab.realKhabar.realKhabar.services.ArticleService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -48,16 +48,6 @@ public class ArticleController {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
-
-//    @GetMapping("{articleId}/categories")
-//    public List<CategoryDto> getCategoriesByArticleId(@PathVariable Long articleId) {
-//        return categoryService.getCategoriesByArticleId(articleId);
-//    }
-
-//    @GetMapping("{articleId}/comments")
-//    public List<CommentDto> getCommentsByArticleId(@PathVariable Long articleId) {
-//        return articleService.getCommentsByArticleId(articleId);
-//    }
 
     @GetMapping("/category/{categoryId}/page/{pageNumber}")
     public Page<ArticleView> getArticlesByCategoryId(@PathVariable Long categoryId, @PathVariable int pageNumber) {

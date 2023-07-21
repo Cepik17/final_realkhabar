@@ -10,7 +10,7 @@
     <main class="container">
         <div class="row g-5">
             <div id="article" class="col-md-8"></div>
-            <div th:insert="~{layout/sidebar}" class="col-md-4"></div>
+            <div th:if="${lastArticles != null}" th:insert="~{layout/sidebar}" class="col-md-4"></div>
         </div>
     </main>
     <div class="modal fade" id="addNewCommentModal" tabindex="-1" aria-labelledby="exampleModalLabel"
@@ -32,7 +32,6 @@
             </div>
         </div>
     </div>
-
     <div class="modal fade" id="deleteCommentModal" tabindex="-1" aria-labelledby="deleteArticleModal"
          aria-hidden="true">
         <div class="modal-dialog">

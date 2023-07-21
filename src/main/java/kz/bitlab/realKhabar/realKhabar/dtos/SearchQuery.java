@@ -1,4 +1,4 @@
-package kz.bitlab.realKhabar.realKhabar.models;
+package kz.bitlab.realKhabar.realKhabar.dtos;
 
 import lombok.Getter;
 import lombok.Setter;

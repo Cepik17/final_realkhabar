@@ -1,7 +1,7 @@
 package kz.bitlab.realKhabar.realKhabar.services;
 
 import kz.bitlab.realKhabar.realKhabar.dtos.*;
-import kz.bitlab.realKhabar.realKhabar.models.SearchQuery;
+import kz.bitlab.realKhabar.realKhabar.dtos.SearchQuery;
 import org.springframework.data.domain.Page;
 
 import java.util.List;
@@ -21,10 +21,6 @@ public interface ArticleService {
     ArticleView getArticleById(Long articleId);
 
     ArticleView updateArticle(ArticleUpdate articleUpdate);
-
-   // List<CategoryDto> getCategoriesByArticleId(Long articleId);
-
-   // List<CommentDto> getCommentsByArticleId(Long article);
 
     Page<ArticleView> getArticlesByCategory(Long categoryId, int page, int size);
 

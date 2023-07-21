@@ -49,8 +49,8 @@
     <script type="text/javascript">
         function addArticle() {
             let req = new XMLHttpRequest()
-            let select = document.getElementById("categoryId");
-            let selectedCategories = Array.from(select.selectedOptions).map(option => parseInt(option.value));
+            let select = document.getElementById("categoryId")
+            let selectedCategories = Array.from(select.selectedOptions).map(option => parseInt(option.value))
             let articleCreate = {
                 "title": document.getElementById("title").value,
                 "description": document.getElementById("description").value,

@@ -1,6 +1,5 @@
 package kz.bitlab.realKhabar.realKhabar.controllers;
 
-import kz.bitlab.realKhabar.realKhabar.services.ArticleService;
 import kz.bitlab.realKhabar.realKhabar.services.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;

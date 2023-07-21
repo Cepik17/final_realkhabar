@@ -5,7 +5,8 @@
 <div layout:fragment="content">
     <main class="container">
         <div class="p-4 p-md-5 mb-4 rounded text-body-emphasis bg-body-secondary"
-             th:style="'background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('+${articleOfTheDay.getImgUrl()}+'); background-size: cover;'">
+             th:style="'background: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('+${articleOfTheDay.getImgUrl()}+'); background-size: cover;'"
+             th:if="${articleOfTheDay != null}">
             <div class="col-lg-6 px-0 text-white">
                 <h2 class="display-4 fst-italic" th:text="${articleOfTheDay.getTitle()}"></h2>
                 <p class="lead my-3" th:text="${articleOfTheDay.getDescription()}"></p>
@@ -34,7 +35,7 @@
                        th:href="@{'/page/'+${pageNumber - 1}}">В будущее</a>
                 </nav>
             </div>
-            <div class="col-md-4" th:insert="~{layout/sidebar}">
+            <div class="col-md-4" th:if="${lastArticles != null}" th:insert="~{layout/sidebar}">
             </div>
         </div>
     </main>

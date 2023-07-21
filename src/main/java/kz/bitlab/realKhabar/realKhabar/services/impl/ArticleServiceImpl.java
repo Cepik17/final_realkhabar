@@ -6,7 +6,6 @@ import kz.bitlab.realKhabar.realKhabar.mappers.CommentMapper;
 import kz.bitlab.realKhabar.realKhabar.models.*;
 import kz.bitlab.realKhabar.realKhabar.repositories.ArticleRepository;
 import kz.bitlab.realKhabar.realKhabar.repositories.CategoryRepository;
-import kz.bitlab.realKhabar.realKhabar.repositories.CommentRepository;
 import kz.bitlab.realKhabar.realKhabar.services.ArticleService;
 import kz.bitlab.realKhabar.realKhabar.services.CommentService;
 import kz.bitlab.realKhabar.realKhabar.services.UserService;
@@ -137,21 +136,6 @@ public class ArticleServiceImpl implements ArticleService {
         articleRepository.save(article);
         return articleMapper.toView(article);
     }
-
-//    @Override
-//    public List<CategoryDto> getCategoriesByArticleId(Long articleId) {
-//        Article article = articleRepository.findById(articleId).orElseThrow();
-//        List<Category> categories = article.getCategories();
-//        ArticleView articleView = articleMapper.toView(article);
-//        return articleView.getCategories();
-//    }
-
-//    @Override
-//    public List<CommentDto> getCommentsByArticleId(Long articleId) {
-//        Article article = articleRepository.findById(articleId).orElseThrow();
-//        List<Comment> comments = commentService.findAllByArticle(article);
-//        return commentMapper.toDtoList(comments);
-//    }
 
     @Override
     public Page<ArticleView> getArticlesByCategory(Long categoryId, int page, int size) {
