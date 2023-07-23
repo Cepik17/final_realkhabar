@@ -1,4 +1,8 @@
-BITLAB ACADEMY. Финальный проект.
+docker push cepik17/final-realkhabar
+admin@gmail.com, pwd: qwe
+https://github.com/Cepik17/final_realkhabar
+
+0BITLAB ACADEMY. Финальный проект.
 Правила разработки и защиты финального проекта.
 Технические требования:
 1. Ваш проект должен быть реализован на фреймворке - Spring Boot
