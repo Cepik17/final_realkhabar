@@ -19,7 +19,7 @@
                 <article class="blog-post" th:each="article :${articles.getContent()}">
                     <h4 class="display-5 link-body-emphasis mb-1" th:text="${article.getTitle()}"></h4>
                     <p class="blog-post-meta">
-                        <span th:text="${#temporals.format(article.postTime, 'dd MMMM yyyy HH:mm')}"></span>
+                        <span th:text="${#temporals.format(article.postTime, 'dd MMMM yyyy, HH:mm')}"></span>
                         <span> автор </span>
                         <a th:href="${'/author/' + article.getAuthor().getId()}"
                            th:text="${article.getAuthor().fullName}"></a>

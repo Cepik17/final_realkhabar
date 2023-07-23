@@ -72,7 +72,7 @@
                         let optionsTime = {hour: 'numeric', minute: 'numeric'}
                         let formattedDate = new Date(article.postTime).toLocaleDateString("ru-RU", optionsDate)
                         let formattedTime = new Date(article.postTime).toLocaleTimeString("ru-RU", optionsTime)
-                        formattedDate = formattedDate.replaceAll(" г.", " ")
+                        formattedDate = formattedDate.replaceAll(" г.", ", ")
                         let html = ""
                         html += "<article class='blog-post'>"
                         html += "<h2 class='display-5 link-body-emphasis mb-1'>" + article.title + "</h2>"
@@ -90,7 +90,7 @@
                             let optionsTime = {hour: 'numeric', minute: 'numeric'}
                             let formattedDate = new Date(comments[i].commentTime).toLocaleDateString("ru-RU", optionsDate)
                             let formattedTime = new Date(comments[i].commentTime).toLocaleTimeString("ru-RU", optionsTime)
-                            formattedDate = formattedDate.replaceAll(" г.", " ")
+                            formattedDate = formattedDate.replaceAll(" г.", ", ")
                             html += "<p class='fw-medium'>" + comments[i].author.fullName + " <span>" + formattedDate + formattedTime + "</span></p>"
                             html += "<p>" + comments[i].commentText + "</p>"
                             let isAdmin = document.getElementById('ROLE_Admin') !== null;

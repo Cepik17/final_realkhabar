@@ -28,7 +28,7 @@
                     let optionsTime = {hour: 'numeric', minute: 'numeric'}
                     let formattedDate = new Date(articles[i].postTime).toLocaleDateString("ru-RU", optionsDate)
                     let formattedTime = new Date(articles[i].postTime).toLocaleTimeString("ru-RU", optionsTime)
-                    formattedDate = formattedDate.replaceAll(" г.", " ")
+                    formattedDate = formattedDate.replaceAll(" г.", ", ")
                     html += "<article class='blog-post'>"
                     html += "<h4 class='display-5 link-body-emphasis mb-1'>" + articles[i].title + "</h4>"
                     html += "<p class='blog-post-meta'>"
