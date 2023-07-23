@@ -1,4 +1,4 @@
-docker push cepik17/final-realkhabar
+docker pull cepik17/final-realkhabar
 admin@gmail.com, pwd: qwe
 https://github.com/Cepik17/final_realkhabar
 
